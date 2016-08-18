@@ -55,7 +55,7 @@ RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/my.cnf \
 	&& mv /tmp/my.cnf /etc/mysql/my.cnf
 
 VOLUME /var/lib/mysql
-RUN sed -i "s/= mysql/= root/g" /etc/nginx/nginx.conf
+RUN sed -i "s/= mysql/= root/g" /etc/mysql/my.cnf
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
