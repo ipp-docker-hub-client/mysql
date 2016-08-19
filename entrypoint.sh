@@ -104,7 +104,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		echo
-		for f in /docker-entrypoint-initdb.d/*; do
+		for f in /init.dbs/*; do
 			case "$f" in
 				*.sh)     echo "$0: running $f"; . "$f" ;;
 				*.sql)    echo "$0: running $f"; "${mysql[@]}" < "$f"; echo ;;
