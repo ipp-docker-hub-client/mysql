@@ -1,4 +1,5 @@
 # MySQL
+## Default version is 5.7.14
 ## A fork of https://hub.docker.com/_/mysql/
 
 Please make sure to set one of these environment variables:
