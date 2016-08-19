@@ -55,12 +55,8 @@ RUN sed -Ei 's/^(bind-address|log)/#&/' /etc/mysql/my.cnf \
 	&& mv /tmp/my.cnf /etc/mysql/my.cnf
 
 VOLUME /var/lib/mysql
-RUN sed -i "s/= mysql/= root/g" /etc/mysql/my.cnf
-
+ADD mysql.cnf /etc/mysql/conf.d/
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod 777 /usr/local/bin/entrypoint.sh
-
 ENTRYPOINT ["entrypoint.sh"]
-
-EXPOSE 3306
 CMD ["mysqld"]
