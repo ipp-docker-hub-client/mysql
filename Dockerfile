@@ -1,9 +1,9 @@
-FROM mysql:latest
+FROM mysql/mysql-server:5.7
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV MYSQL_ALLOW_EMPTY_PASSWORD true
 
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["mysqld","--user=root"]
+RUN sed -i "s/mysql/root/g" /etc/my.cnf
 
-RUN ps -aux
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["mysqld"]
