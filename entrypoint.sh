@@ -124,4 +124,5 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 	fi
 fi
 
-mysqld --user=root --console
+exec "$@"
+#mysqld --user=root --console
