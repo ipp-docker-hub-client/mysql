@@ -3,6 +3,7 @@ FROM ipropertygroup/base:latest
 ENV MYSQL_MAJOR 5.7
 ENV MYSQL_VERSION 5.7.14-1debian8
 ENV DEBIAN_FRONTEND noninteractive
+ENV MYSQL_ALLOW_EMPTY_PASSWORD true
 
 RUN mkdir /init.dbs
 RUN apt-get update && apt-get install -y perl pwgen debconf-utils --no-install-recommends && rm -rf /var/lib/apt/lists/*
@@ -21,6 +22,6 @@ RUN apt-get update && apt-get install -y mysql-server="${MYSQL_VERSION}" && rm -
 
 ADD mysqld.cnf /etc/mysql/conf.d/
 ADD init.sh /tmp/
-RUN chmod +x /tmp/init.sh; /tmp/init.sh;
+RUN chmod +x /tmp/init.sh; /tmp/init.sh mysqld;
 
 ENTRYPOINT ["mysqld", "--user", "root","--console"]
