@@ -12,8 +12,8 @@ RUN echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-${MYSQL_MAJOR}" > /
 
 #RUN debconf-get-selections | grep mysql #FYI
 
-RUN debconf-set-selections <<< "mysql-server mysql-server/root_password password password"
-RUN debconf-set-selections <<< "mysql-server mysql-server/root_password_again password password"
+RUN echo "mysql-server mysql-server/root_password password password" | debconf-set-selections
+RUN echo "mysql-server mysql-server/root_password_again password password" | debconf-set-selections
 
 RUN apt-get update && apt-get install -y mysql-server="${MYSQL_VERSION}" && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
