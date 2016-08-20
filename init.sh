@@ -123,6 +123,3 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		echo
 	fi
 fi
-
-exec "$@"
-#mysqld --user=root --console
