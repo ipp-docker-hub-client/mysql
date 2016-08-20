@@ -5,9 +5,11 @@ ENV MYSQL_VERSION 5.7.14-1debian8
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN mkdir /init.dbs
-RUN apt-get update && apt-get install -y perl pwgen --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y perl pwgen debconf-utils --no-install-recommends && rm -rf /var/lib/apt/lists/*
 RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5
 RUN echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+
+RUN debconf-get-selections | grep mysql #FYI
 
 RUN debconf-set-selections <<< "mysql-server mysql-server/root_password password ''"
 RUN debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ''"
