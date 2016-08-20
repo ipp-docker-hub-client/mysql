@@ -33,7 +33,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		fi
 
 		mkdir -p "$DATADIR"
-		chown -R root:root "$DATADIR"
+		chown -R mysql:mysql "$DATADIR"
 		chmod -R 775 "$DATADIR"
 
 		echo 'Initializing database'
