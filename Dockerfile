@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y mysql-server="${MYSQL_VERSION}" && rm -
     && chmod 775 /var/run/mysqld
 
 ADD mysqld.cnf /etc/mysql/conf.d/
-RUN chmod +x init.sh; ./init.sh;
+ADD init.sh /tmp/
+RUN chmod +x /tmp/init.sh; /tmp/init.sh;
 
 ENTRYPOINT ["mysqld", "--user", "root","--console"]
