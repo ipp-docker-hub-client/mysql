@@ -1,27 +1,18 @@
-FROM ipropertygroup/base:latest
+FROM oraclelinux:latest
+ENV PACKAGE_URL https://repo.mysql.com/yum/mysql-5.7-community/docker/x86_64/mysql-community-server-minimal-5.7.14-1.el7.x86_64.rpm
 
-ENV MYSQL_MAJOR 5.7
-ENV MYSQL_VERSION 5.7.14-1debian8
-ENV DEBIAN_FRONTEND noninteractive
-ENV MYSQL_ALLOW_EMPTY_PASSWORD true
+# Install server
+RUN rpmkeys --import http://repo.mysql.com/RPM-GPG-KEY-mysql \
+  && yum install -y $PACKAGE_URL \
+  && yum install -y libpwquality \
+  && rm -rf /var/cache/yum/*
+RUN mkdir /docker-entrypoint-initdb.d
 
-RUN mkdir /init.dbs
-RUN apt-get update && apt-get install -y perl pwgen debconf-utils --no-install-recommends && rm -rf /var/lib/apt/lists/*
-RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys A4A9406876FCBD3C456770C88C718D3B5072E1F5
-RUN echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
+VOLUME /var/lib/mysql
 
-#RUN debconf-get-selections | grep mysql #FYI
+COPY my.cnf /etc/my.cnf
+COPY docker-entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
-RUN echo "mysql-server mysql-server/root_password password password" | debconf-set-selections
-RUN echo "mysql-server mysql-server/root_password_again password password" | debconf-set-selections
-
-RUN apt-get update && apt-get install -y mysql-server="${MYSQL_VERSION}" && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
-    && chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
-    && chmod 775 /var/run/mysqld
-
-ADD mysqld.cnf /etc/mysql/conf.d/
-ADD init.sh /tmp/
-RUN chmod +x /tmp/init.sh; /tmp/init.sh mysqld;
-
-ENTRYPOINT ["mysqld", "--user", "root","--console"]
+EXPOSE 3306 33060
+CMD ["mysqld"]
